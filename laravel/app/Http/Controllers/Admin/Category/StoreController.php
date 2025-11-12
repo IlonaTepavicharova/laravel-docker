@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\StoreRequest;
 use App\Models\Category;
-use http\Env\Request;
+//use http\Env\Request;
 
 class StoreController extends Controller
 {
@@ -13,6 +13,6 @@ class StoreController extends Controller
     {
         $data = $request->validated();
         Category::firstOrCreate($data);
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.category.create');
     }
 }

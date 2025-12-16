@@ -22,7 +22,7 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         ports:
-            -   "8090:80"
+            -   "8091:80"
         environment:
             - DB_HOST=db
             - DB_PORT=3306

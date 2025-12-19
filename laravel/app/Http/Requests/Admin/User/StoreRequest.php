@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string'
+            'role' => 'required|integer'
         ];
     }
     public function messages(){
@@ -35,8 +35,7 @@ class StoreRequest extends FormRequest
             'email.string' => 'Это поле должно иметь строковый тип данных',
             'email.email' => 'Ваша почта должна соответствовать формату user@user.com',
             'email.unique' => 'Пользовкатель с таким email уже существует',
-            'password.required' => 'Заполните это поле',
-            'password.string' => 'Это поле должно иметь строковый тип данных',
+
         ];
     }
 }

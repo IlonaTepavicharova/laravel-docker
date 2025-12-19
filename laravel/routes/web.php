@@ -18,7 +18,24 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['verify' => true]);
 
 Route::group(['namespace' => 'App\Http\Controllers\Main'], function () {
-    Route::get('/', IndexController::class);
+    Route::get('/', IndexController::class)->name('main.index');
+});
+Route::group(['namespace' => '\App\Http\Controllers\Category','prefix' => 'categories'], function () {
+    Route::get('/', \App\Http\Controllers\Category\IndexController::class)->name('category.index');
+    Route::group(['namespace' => 'Post','prefix' => '{category}/posts'], function () {
+        Route::get('/', 'IndexController')->name('category.post.index');
+    });
+});
+Route::group(['namespace' => 'App\Http\Controllers\Post', 'prefix' => 'posts'], function () {
+    Route::get('/', \App\Http\Controllers\Post\IndexController::class)->name('post.index');
+    Route::get('/{post}', \App\Http\Controllers\Post\ShowController::class)->name('post.show');
+
+    Route::group(['namespace' => 'Comment','prefix' => '{post}/comments'], function () {
+       Route::post('/', 'StoreController')->name('post.comment.store');
+    });
+    Route::group(['namespace' => 'Like','prefix' => '{post}/likes'], function () {
+        Route::post('/', 'StoreController')->name('post.like.store');
+    });
 });
 Route::group(["namespace" => 'App\Http\Controllers\Personal', 'prefix'=> 'personal', "middleware" => ["auth","verified"]], function () {
     Route::group(["namespace" => 'Main', 'prefix' => 'main'], function () {
@@ -26,9 +43,13 @@ Route::group(["namespace" => 'App\Http\Controllers\Personal', 'prefix'=> 'person
     });
     Route::group(["namespace" => 'Liked', 'prefix' => 'liked'], function () {
         Route::get("/", "IndexController")->name("personal.liked.index");
+        Route::delete("/{post}", "DeleteController")->name("personal.liked.delete");
     });
     Route::group(["namespace" => 'Comment', 'prefix' => 'comment'], function () {
         Route::get("/", "IndexController")->name("personal.comment.index");
+        Route::patch("/{comment}", "UpdateController")->name("personal.comment.update");
+        Route::get("/{comment}/edit", "EditController")->name("personal.comment.edit");
+        Route::delete("/{comment}", "DeleteController")->name("personal.comment.delete");
     });
 });
 Route::group(["namespace" => 'App\Http\Controllers\Admin', 'prefix'=> 'admin', "middleware" => ["auth", "admin","verified"]], function () {
